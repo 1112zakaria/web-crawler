@@ -58,10 +58,18 @@ public class PageService {
         rootEntity = getPage(rootPage);
         childEntity = getPage(childPage);
 
+        // increment page reference count
+        incrementPageReferenceCount(childEntity);
+
         // save link using IDs to DB
         linkEntity = new LinkEntity(rootEntity.getId(), childEntity.getId());
         linkRepository.save(linkEntity);
         return linkEntity;
+    }
+
+    private void incrementPageReferenceCount(PageEntity page) {
+        page.incrementReferenceCount();
+        pageRepository.save(page);
     }
 
 }

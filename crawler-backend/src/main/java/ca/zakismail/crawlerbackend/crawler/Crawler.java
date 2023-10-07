@@ -1,15 +1,22 @@
 package ca.zakismail.crawlerbackend.crawler;
 
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.util.*;
 
-public class Crawler {
+@Slf4j
+@Component
+public class Crawler implements Runnable {
     // required: visited, adjacency list
     private HashMap<String, Page> pages;
     private Queue<Page> queue; // queue of next pages to visit
-    private String rootUrl;
+    private final String rootUrl;
 
-    public Crawler(String rootUrl) {
+    public Crawler(@Value("${crawler.seedUrl}") String rootUrl) {
         this.rootUrl = rootUrl;
     }
 
@@ -41,6 +48,7 @@ public class Crawler {
         // read page data
         parser = new Parser(rootPage.getUrl());
         parser.parse();
+        rootPage.setData(parser.getData());
 
         // read page links and fetch/create child page object
         for (String linkUrl : parser.getLinks()) {
@@ -73,4 +81,10 @@ public class Crawler {
         c.crawl();
     }
 
+    @Override
+    public void run() {
+        log.debug("Crawler has started.");
+        this.crawl();
+        log.debug("Crawler is done.");
+    }
 }

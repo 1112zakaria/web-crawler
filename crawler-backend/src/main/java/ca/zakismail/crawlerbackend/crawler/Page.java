@@ -49,4 +49,8 @@ public class Page {
     public Set<Page> getLinks() {
         return links;
     }
+
+    public void setData(String data) {
+        this.data = data;
+    }
 }

@@ -1,6 +1,7 @@
 package ca.zakismail.crawlerbackend.crawler;
 
 
+import ca.zakismail.crawlerbackend.api.PageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,9 @@ public class Crawler implements Runnable {
     private HashMap<String, Page> pages;
     private Queue<Page> queue; // queue of next pages to visit
     private final String rootUrl;
+
+    // FIXME: is this scuffed?
+    private PageService pageService;
 
     public Crawler(@Value("${crawler.seedUrl}") String rootUrl) {
         this.rootUrl = rootUrl;
@@ -50,10 +54,16 @@ public class Crawler implements Runnable {
         parser.parse();
         rootPage.setData(parser.getData());
 
+        // TODO: store page data in DB... or update data if it exists
+        pageService.addPage(rootPage);
+
         // read page links and fetch/create child page object
         for (String linkUrl : parser.getLinks()) {
             childPage = getPage(linkUrl);
-            rootPage.addLink(childPage);
+            if (rootPage.addLink(childPage)) {
+                // TODO: store link data in DB if it dne
+                pageService.addLink(rootPage, childPage);
+            }
             if (childPage.getState() == PageState.NEW) {
                 // add non-visited child page links to queue to visit
                 queue.add(childPage);
@@ -79,6 +89,11 @@ public class Crawler implements Runnable {
     public static void main(String[] args) {
         Crawler c = new Crawler("https://people.scs.carleton.ca/~davidmckenney/tinyfruits/N-0.html");
         c.crawl();
+    }
+
+    @Autowired
+    public void setPageService(PageService pageService) {
+        this.pageService = pageService;
     }
 
     @Override

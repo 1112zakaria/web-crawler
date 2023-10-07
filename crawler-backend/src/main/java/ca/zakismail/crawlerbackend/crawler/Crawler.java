@@ -32,10 +32,14 @@ public class Crawler {
     }
 
     private void crawlPage(Page page) {
+        Parser parser;
+
         // set page to visited
         page.setVisited(true);
 
         // read page data
+        parser = new Parser(page.getUrl());
+        parser.parse();
 
         // read page links and create new page object
 
@@ -53,6 +57,11 @@ public class Crawler {
         }
         pages.put(url, page);
         return page;
+    }
+
+    public static void main(String[] args) {
+        Crawler c = new Crawler("https://people.scs.carleton.ca/~davidmckenney/tinyfruits/N-0.html");
+        c.crawl();
     }
 
 }

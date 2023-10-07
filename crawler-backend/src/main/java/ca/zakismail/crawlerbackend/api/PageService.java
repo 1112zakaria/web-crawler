@@ -52,6 +52,12 @@ public class PageService {
         return pageEntity;
     }
 
+    public PageEntity getPage(Long id) {
+        PageEntity pageEntity;
+        pageEntity = pageRepository.findById(id).orElse(null);
+        return pageEntity;
+    }
+
     public LinkEntity addLink(Page rootPage, Page childPage) {
         PageEntity rootEntity, childEntity;
         LinkEntity linkEntity;

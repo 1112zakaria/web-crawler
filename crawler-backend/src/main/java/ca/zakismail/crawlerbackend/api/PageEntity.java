@@ -42,6 +42,10 @@ public class PageEntity {
         return url;
     }
 
+    public String getData() {
+        return data;
+    }
+
     public String getPageEntityLink() {
         // FIXME: this should be done programmatically, base url
         String link = "localhost:" + 4000 + "/page/" + id;

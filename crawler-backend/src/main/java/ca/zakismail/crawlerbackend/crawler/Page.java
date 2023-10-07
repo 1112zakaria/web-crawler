@@ -1,13 +1,12 @@
 package ca.zakismail.crawlerbackend.crawler;
 
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 
 public class Page {
     private final String url;
     private String data;
-    private final HashSet<Page> links = new HashSet<>();
-    private boolean isVisited = false;
+    private final Set<Page> links = new HashSet<>();
+    private PageState state = PageState.NEW;
 
     public Page(String url) {
         this.url = url;
@@ -35,15 +34,19 @@ public class Page {
         return true;
     }
 
-    public void setVisited(boolean isVisited) {
-        this.isVisited = isVisited;
+    public void setState(PageState state) {
+        this.state = state;
     }
 
-    public boolean isVisited() {
-        return isVisited;
+    public PageState getState() {
+        return state;
     }
 
     public String getUrl() {
         return url;
+    }
+
+    public Set<Page> getLinks() {
+        return links;
     }
 }

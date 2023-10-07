@@ -31,30 +31,39 @@ public class Crawler {
         }
     }
 
-    private void crawlPage(Page page) {
+    private void crawlPage(Page rootPage) {
         Parser parser;
+        Page childPage;
 
         // set page to visited
-        page.setVisited(true);
+        rootPage.setState(PageState.VISITED);
 
         // read page data
-        parser = new Parser(page.getUrl());
+        parser = new Parser(rootPage.getUrl());
         parser.parse();
 
-        // read page links and create new page object
-
-        // add non-visited page links to queue to visit
+        // read page links and fetch/create child page object
+        for (String linkUrl : parser.getLinks()) {
+            childPage = getPage(linkUrl);
+            rootPage.addLink(childPage);
+            if (childPage.getState() == PageState.NEW) {
+                // add non-visited child page links to queue to visit
+                queue.add(childPage);
+                childPage.setState(PageState.QUEUED);
+            }
+        }
     }
 
-    public List<Page> getPages() {
-        return new ArrayList<>(pages.values());
+    public Set<Page> getPages() {
+        return new HashSet<>(pages.values());
     }
 
     private Page getPage(String url) {
-        Page page = new Page(url);
+        Page page;
         if (pages.containsKey(url)) {
             return pages.get(url);
         }
+        page = new Page(url);
         pages.put(url, page);
         return page;
     }

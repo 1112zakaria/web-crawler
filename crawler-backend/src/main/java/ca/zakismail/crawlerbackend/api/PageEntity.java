@@ -1,10 +1,16 @@
 package ca.zakismail.crawlerbackend.api;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.env.Environment;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
+import java.util.Properties;
 
 @Entity
 @RequiredArgsConstructor
@@ -30,5 +36,15 @@ public class PageEntity {
 
     public void incrementReferenceCount() {
         this.referenceCount++;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getPageEntityLink() {
+        // FIXME: this should be done programmatically, base url
+        String link = "localhost:" + 4000 + "/page/" + id;
+        return link;
     }
 }

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>URL</th>
+            <th>Page Data</th>
+        </tr>
+        <tr th:each="page: ${pages}">
+            <td th:text="${page.url}"></td>
+            <td><a th:href="${page.getPageEntityLink()}" th:text="Link" th:target="${page.getPageEntityLink()}"></a></td>
+        </tr>
+    </table>
+</body>
+</html>

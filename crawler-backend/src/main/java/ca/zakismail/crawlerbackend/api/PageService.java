@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PageService {
@@ -70,6 +72,10 @@ public class PageService {
     private void incrementPageReferenceCount(PageEntity page) {
         page.incrementReferenceCount();
         pageRepository.save(page);
+    }
+
+    public List<PageEntity> getAllPages() {
+        return (List<PageEntity>) pageRepository.findAll();
     }
 
 }

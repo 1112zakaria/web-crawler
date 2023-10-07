@@ -9,7 +9,9 @@
     <p th:text="'URL: ' + ${page.url}"></p>
     <p th:text="'Content: ' + ${page.data}"></p>
     <p>Links:</p>
-
+    <ul th:each="link: ${linkedPages}">
+        <li th:text="${link.url}"></li>
+    </ul>
 
 </body>
 </html>

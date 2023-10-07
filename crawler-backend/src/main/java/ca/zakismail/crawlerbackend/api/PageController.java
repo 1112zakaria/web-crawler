@@ -33,6 +33,7 @@ public class PageController {
     @GetMapping("/page/{id}")
     public String getPageInfo(Model model, @PathVariable Long id) {
         PageEntity page;
+        List<PageEntity> linkedPages;
 
         page = pageService.getPage(id);
         if (page == null) {
@@ -40,7 +41,10 @@ public class PageController {
             return "error";
         }
         log.debug("page exists");
+        linkedPages = pageService.getAllLinkedPages(id);
+
         model.addAttribute("page", page);
+        model.addAttribute("linkedPages", linkedPages);
         return "pageInfo";
     }
 

@@ -13,6 +13,7 @@ public class PageEntity {
     private Long id;
     private String url;
     private String data;
+    private int referenceCount = 0;
 
     public PageEntity(String url, String data) {
         this.url = url;
@@ -25,5 +26,9 @@ public class PageEntity {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public void incrementReferenceCount() {
+        this.referenceCount++;
     }
 }

@@ -22,4 +22,8 @@ public class LinkEntity {
     public Long getId() {
         return id;
     }
+
+    public Long getChildPageId() {
+        return childPageId;
+    }
 }

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Page information</h1>
+    <p th:text="'URL: ' + ${page.url}"></p>
+    <p th:text="'Content: ' + ${page.data}"></p>
+    <p>Links:</p>
+    <ul th:each="link: ${linkedPages}">
+        <li th:text="${link.url}"></li>
+    </ul>
+
+</body>
+</html>

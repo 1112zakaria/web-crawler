@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PageService {
@@ -50,6 +53,12 @@ public class PageService {
         return pageEntity;
     }
 
+    public PageEntity getPage(Long id) {
+        PageEntity pageEntity;
+        pageEntity = pageRepository.findById(id).orElse(null);
+        return pageEntity;
+    }
+
     public LinkEntity addLink(Page rootPage, Page childPage) {
         PageEntity rootEntity, childEntity;
         LinkEntity linkEntity;
@@ -70,6 +79,27 @@ public class PageService {
     private void incrementPageReferenceCount(PageEntity page) {
         page.incrementReferenceCount();
         pageRepository.save(page);
+    }
+
+    public List<PageEntity> getAllLinkedPages(Long id) {
+        List<PageEntity> linkedPages;
+        List<LinkEntity> linkEntities;
+        List<Long> childPageIds = new ArrayList<>();
+
+        linkEntities = linkRepository.findAllByRootPageId(id).orElse(null);
+        if (linkEntities == null) {
+            return null;
+        }
+
+        for (LinkEntity linkEntity : linkEntities) {
+            childPageIds.add(linkEntity.getChildPageId());
+        }
+
+        return (List<PageEntity>) pageRepository.findAllById(childPageIds);
+    }
+
+    public List<PageEntity> getAllPages() {
+        return (List<PageEntity>) pageRepository.findAll();
     }
 
 }

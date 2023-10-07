@@ -42,4 +42,8 @@ public class Page {
     public boolean isVisited() {
         return isVisited;
     }
+
+    public String getUrl() {
+        return url;
+    }
 }
